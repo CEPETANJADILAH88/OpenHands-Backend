@@ -1,12 +1,14 @@
-# Optimized requirements for Hugging Face Spaces
+# Complete requirements for Hugging Face Spaces
+# Based on pyproject.toml but optimized for HF Spaces
+
 # Core FastAPI and server dependencies
-fastapi>=0.104.0
-uvicorn[standard]>=0.24.0
+fastapi
+uvicorn[standard]
 python-multipart
 python-dotenv
 
 # LLM and AI dependencies
-litellm>=1.60.0,!=1.64.4
+litellm>=1.60.0,!=1.64.4,!=1.67.*
 aiohttp>=3.9.0,!=3.11.13
 google-generativeai
 anthropic
@@ -22,6 +24,7 @@ html2text
 pexpect
 jinja2>=3.1.3
 tenacity>=8.5,<10.0
+zope-interface==7.2
 pathspec>=0.12.1
 pyjwt>=2.9.0
 dirhash
@@ -30,9 +33,15 @@ rapidfuzz>=3.9.0
 whatthepatch>=1.0.6
 protobuf>=5.0.0,<6.0.0
 
+# Browser automation (required by browsing_agent)
+browsergym-core==0.13.3
+
 # Monitoring and telemetry
 opentelemetry-api>=1.33.1
 opentelemetry-exporter-otlp-proto-grpc>=1.33.1
+
+# Terminal multiplexer (required by some agents)
+libtmux>=0.37,<0.40
 
 # GitHub integration
 pygithub>=2.5.0
@@ -61,24 +70,28 @@ pylatexenc
 python-docx
 bashlex>=0.18
 
-# Cloud storage (optional)
+# Cloud storage and external services
 boto3
+redis>=5.2,<7.0
+
+# Google APIs
+google-api-python-client>=2.164.0
+google-auth-httplib2
+google-auth-oauthlib
+
+# External services (lightweight)
+e2b>=1.0.5,<1.6.0
 
 # Removed problematic dependencies for HF Spaces:
 # - docker (not needed in containerized environment)
-# - pythonnet (Windows-specific)
-# - modal (external cloud service)
-# - daytona-sdk (not needed)
+# - pythonnet (Windows-specific, causes build issues)
+# - modal (external cloud service, heavy)
+# - daytona-sdk (not essential)
 # - poetry (not needed at runtime)
-# - qtconsole (GUI dependency)
-# - ipywidgets (Jupyter dependency)
-# - redis (external service)
-# - e2b (external service)
-# - google-cloud-aiplatform (heavy dependency)
-# - minio (external service)
-# - stripe (payment processing)
-# - libtmux (terminal multiplexer)
-# - zope-interface (specific version conflict)
+# - qtconsole (GUI dependency, not needed)
+# - ipywidgets (Jupyter dependency, not needed)
+# - google-cloud-aiplatform (very heavy dependency)
+# - minio (external service, not essential)
+# - stripe (payment processing, not needed)
 # - runloop-api-client (external service)
-# - openhands-aci (Azure specific)
-# - browsergym-core (heavy browser dependency)
+# - openhands-aci (Azure specific, not needed)

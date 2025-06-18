@@ -65,7 +65,16 @@ if __name__ == "__main__":
         file_store_path, cache_dir = setup_hf_environment()
         
         logger.info("📦 Importing OpenHands app...")
-        from openhands.server.app import app
+        
+        # Try to import the app with better error handling
+        try:
+            from openhands.server.app import app
+            logger.info("✅ Successfully imported OpenHands app")
+        except ImportError as import_error:
+            logger.error(f"❌ Import error: {import_error}")
+            logger.error("🔍 This might be due to missing dependencies")
+            logger.error("💡 Check if all required packages are installed")
+            raise
         
         # Get configuration
         port = int(os.getenv("PORT", 7860))
@@ -86,6 +95,11 @@ if __name__ == "__main__":
             log_level="info"
         )
         
+    except ImportError as e:
+        logger.error(f"❌ Import error: {e}")
+        logger.error("🔍 Missing dependency detected")
+        logger.error("💡 Please check requirements.txt and ensure all packages are installed")
+        sys.exit(1)
     except Exception as e:
         logger.error(f"❌ Failed to start server: {e}")
         import traceback
